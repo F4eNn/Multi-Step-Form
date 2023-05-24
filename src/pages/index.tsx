@@ -1,7 +1,14 @@
 import Head from 'next/head'
 import { Ubuntu } from 'next/font/google'
-
+import styled from 'styled-components'
+import { HeroBg } from '@/components/Hero/HeroBg'
+import { Content } from '@/components/Content/Content'
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
+
+const Main = styled.main`
+	width: min(100%, 800px);
+  
+`
 
 export default function Home() {
 	return (
@@ -21,9 +28,10 @@ export default function Home() {
 					href='/favicon.ico'
 				/>
 			</Head>
-			<main className={ubuntu.className}>
-
-      </main>
+			<Main className={ubuntu.className}>
+				<HeroBg />
+				<Content />
+			</Main>
 		</>
 	)
 }
