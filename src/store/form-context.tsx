@@ -1,6 +1,8 @@
-import React from "react"
+import React from 'react'
 
 export const FormContext = React.createContext({
-    test1: '',
-    someFunction: (isValidFirstStep: string) => {}
+	setName: (name: string) => {},
+	setEmail: (email: string) => {},
+	setPhone: (phone: string) => {},
+    setFirstStep: (valid: boolean) => {},
 })

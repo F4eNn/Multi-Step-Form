@@ -1,5 +1,7 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { useInput } from '@/hooks/use-inputs'
+import { useContext, useEffect } from 'react'
+import { FormContext } from '@/store/form-context'
 
 const Box = styled.div`
 	position: relative;
@@ -30,28 +32,46 @@ const ErrorMsg = styled.p`
 export const Form = () => {
 	const emailExpression =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
 	const telExpression = /^[+]?[0-9]{9,12}$/
-
 	const telRegex = new RegExp(telExpression)
 	const emailRegex = new RegExp(emailExpression)
 
+	const { setName, setEmail, setPhone, setFirstStep } = useContext(FormContext)
+
 	const {
+		isValidInput: enteredNameIsValid,
+		value: enteredName,
 		inputBlurHandler: nameInputBlurHandler,
 		inputChangeHandler: nameInputChangeHandler,
 		isError: nameInputIsValid,
 	} = useInput(value => value.trim() !== '')
 	const {
+		isValidInput: enteredEmailIsValid,
+		value: enteredEmail,
 		inputBlurHandler: emailInputBlurHandler,
 		inputChangeHandler: emailInputChangeHandler,
 		isError: emailInputIsValid,
 	} = useInput(value => emailRegex.test(value))
 	const {
+		isValidInput: enteredTelIsValid,
+		value: enteredTel,
 		inputBlurHandler: telInputBlurHandler,
 		inputChangeHandler: telInputChangeHandler,
 		isError: telIsValid,
 	} = useInput(value => telRegex.test(value.trim()))
-	
+
+	useEffect(() => {
+		if (enteredNameIsValid && enteredEmailIsValid && enteredTelIsValid) {
+			setName(enteredName)
+			setEmail(enteredEmail)
+			setPhone(enteredTel)
+			setFirstStep(true)
+			return
+		}
+		return setFirstStep(false)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [enteredEmailIsValid, enteredNameIsValid, enteredTelIsValid])
+
 	const errorName = nameInputIsValid && '1px solid var(--error)'
 	const errorEmail = emailInputIsValid && '1px solid var(--error)'
 	const errorTel = telIsValid && '1px solid var(--error)'

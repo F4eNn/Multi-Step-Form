@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 
-interface Btn {
-	$Bgc?: boolean
-	$fontColor?: boolean
+interface StyledButton {
+	$primary?: boolean
+	bghover?: string
+	colorhover?: string
 }
+
 const ButtonBox = styled.div`
 	width: 100%;
 	padding: 0.7rem 1.5rem;
@@ -12,34 +14,37 @@ const ButtonBox = styled.div`
 	background-color: var(--white);
 `
 
-const Button = styled.button.attrs<Btn>(props => ({
-	hoverbgc: props.hoverbgc,
-	hoverfont: props.hoverfont,
-}))`
-	background: ${props => (props.$Bgc ? 'var(--primary)' : 'transparent')};
-	color: ${props => (props.$fontColor ? 'var(--white)' : 'var(--grey)')};
+const Button = styled.button<StyledButton>`
 	border: none;
-	padding: 0.5rem 1.5rem;
+	padding: 0.5rem 1rem;
 	border-radius: 5px;
 	text-transform: capitalize;
-
+	background-color: ${props => (props.$primary ? 'var(--primary)' : 'transparent')};
+	color: ${props => (props.$primary ? 'var(--white)' : 'var(--grey)')};
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 	&:hover {
-		background-color: ${props => props.hoverbgc};
-		color: ${props => props.hoverfont};
+		background-color: ${props => props.bghover};
+		color: ${props => props.colorhover};
 	}
 `
-
-export const ButtonsPanel = () => {
+type ButtonProps = {
+	nextStep: () => void
+	backStep: () => void
+}
+export const ButtonsPanel = ({ nextStep, backStep }: ButtonProps) => {
 	return (
 		<ButtonBox>
-			<Button hoverfont='var(--primary)'>go back</Button>
 			<Button
-				hoverbgc='var(--button-hover)'
-				$fontColor
-				$Bgc>
-				next
+				onClick={backStep}
+				colorhover='var(--primary)'>
+				go back
+			</Button>
+			<Button
+				onClick={nextStep}
+				bghover='var(--button-hover)'
+				$primary>
+				next step
 			</Button>
 		</ButtonBox>
 	)

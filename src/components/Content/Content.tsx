@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 import { PersonalData } from './StepsForm/PersonalData/PersonalData'
 import { ButtonsPanel } from './StepsForm/ButtonsPanel/ButtonsPanel'
-
-
+import { ReactElement } from 'react'
 
 const ContainerContent = styled.div``
 
@@ -15,21 +14,20 @@ const Card = styled.div`
 	border-radius: 10px;
 	font-size: clamp(1em, 2.5vw, 1.5em);
 	background-color: var(--white);
-    `
-
-export const Content = () => {
-
-    
-	const test = (callback: () => void) => {
-		callback()
-	}
-
+`
+type ContentProps = {
+	renderStep: ReactElement
+	nextStepHandler: () => void
+	backStepHandler: () => void
+}
+export const Content = ({ renderStep, nextStepHandler,backStepHandler }: ContentProps) => {
 	return (
 		<ContainerContent>
 			<Card>
 				<PersonalData />
+				{renderStep}
 			</Card>
-			<ButtonsPanel />
+			<ButtonsPanel backStep={backStepHandler} nextStep={nextStepHandler}/>
 		</ContainerContent>
 	)
 }

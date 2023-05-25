@@ -3,14 +3,18 @@ import { Ubuntu } from 'next/font/google'
 import styled from 'styled-components'
 import { HeroBg } from '@/components/Hero/HeroBg'
 import { Content } from '@/components/Content/Content'
+import { useSteps } from '@/hooks/use-steps'
+
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
 	width: min(100%, 800px);
-  
 `
 
 export default function Home() {
+	const arrayTest = [<div key={'one'}>one</div>, <div key={'two'}>two</div>, <div key={'three'}>thre</div>, <div key={'four'}>four</div>]
+
+	const { nextStep, backStep, currentStepIndex, step} = useSteps(arrayTest)
 	return (
 		<>
 			<Head>
@@ -30,7 +34,7 @@ export default function Home() {
 			</Head>
 			<Main className={ubuntu.className}>
 				<HeroBg />
-				<Content />
+				<Content renderStep={step} nextStepHandler={nextStep} backStepHandler={backStep}/>
 			</Main>
 		</>
 	)

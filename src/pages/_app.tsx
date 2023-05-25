@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle } from 'styled-components'
-import { FormProvider } from '@/store/FormProvider' 
+import { FormProvider } from '@/store/FormProvider'
 
 const GlobalStyle = createGlobalStyle`
       *,

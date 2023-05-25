@@ -7,9 +7,8 @@ export const useInput = (currentValue: (value: string) => boolean) => {
 	const enteredValueIsValid = currentValue(enteredValue)
 	const inputIsValid = !enteredValueIsValid && enteredValueTouched
 
-	const inputChangeHandler = (e: ChangeEvent) => {
-		const target = e.target as HTMLInputElement
-		setEnteredValue(target.value)
+	const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+		setEnteredValue(e.target.value)
 	}
 
 	const inputBlurHandler = () => {
@@ -17,6 +16,8 @@ export const useInput = (currentValue: (value: string) => boolean) => {
 	}
 
 	return {
+		isValidInput: enteredValueIsValid,
+		value: enteredValue,
 		inputBlurHandler,
 		inputChangeHandler,
 		isError: inputIsValid,
