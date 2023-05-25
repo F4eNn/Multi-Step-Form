@@ -1,61 +1,69 @@
 import styled, { css } from 'styled-components'
-import { ChangeEvent, useContext, useState } from 'react'
-import { FormContext } from '@/store/form-context'
+import { useInput } from '@/hooks/use-inputs'
+
 const Box = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 	margin-top: 0.8rem;
 `
-const Input = styled.input`
+const Input = styled.input<{ $valid?: string | false }>`
 	padding: 0.5rem 1rem;
 	border-radius: 5px;
-	border: 1px solid var(--border-color);
+	border: ${props => props.$valid || '1px solid var(--border-color)'};
 	&:focus {
-		outline: 1px solid var(--light-blue);
+		outline: ${props => props.$valid || '1px solid var(--light-blue)'};
 	}
-	${({ valid }: any) =>
-    valid &&
-    css`
-      border: 1px solid rgb(0, 156, 38);
-
-      
-    `}
 `
 const Label = styled.label`
 	color: var(--primary);
 	font-size: 0.7em;
 `
-
+const ErrorMsg = styled.p`
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 0.6em;
+	color: var(--error);
+`
 export const Form = () => {
-	const [isName, setIsName] = useState('')
-	const [isNameValid, setIsNameValid] = useState(false)
+	const emailExpression =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-	const nameInputHandler = (e: ChangeEvent) => {
-		const target = e.target as HTMLInputElement
-		setIsName(target.value)
-		if (target.value === '') {
-			setIsNameValid(false)
-			return
-		}
-		setIsNameValid(true)
-	}
+	const telExpression = /^[+]?[0-9]{9,12}$/
 
-	const isNameTuched = () => {
-		if (isNameValid) {
-			console.log('nie ma errora')
-			return
-		}
-		console.log('jest error')
-	}
+	const telRegex = new RegExp(telExpression)
+	const emailRegex = new RegExp(emailExpression)
 
+	const {
+		inputBlurHandler: nameInputBlurHandler,
+		inputChangeHandler: nameInputChangeHandler,
+		isError: nameInputIsValid,
+	} = useInput(value => value.trim() !== '')
+	const {
+		inputBlurHandler: emailInputBlurHandler,
+		inputChangeHandler: emailInputChangeHandler,
+		isError: emailInputIsValid,
+	} = useInput(value => emailRegex.test(value))
+	const {
+		inputBlurHandler: telInputBlurHandler,
+		inputChangeHandler: telInputChangeHandler,
+		isError: telIsValid,
+	} = useInput(value => telRegex.test(value.trim()))
+	
+	const errorName = nameInputIsValid && '1px solid var(--error)'
+	const errorEmail = emailInputIsValid && '1px solid var(--error)'
+	const errorTel = telIsValid && '1px solid var(--error)'
 	return (
 		<form>
 			<Box>
 				<Label htmlFor='name'>Name</Label>
+				{nameInputIsValid && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
-					onBlur={isNameTuched}
-					onChange={nameInputHandler}
+					$valid={errorName}
+					onBlur={nameInputBlurHandler}
+					onChange={nameInputChangeHandler}
 					id='name'
 					type='text'
 					placeholder='e.g. Stephen King'
@@ -63,7 +71,11 @@ export const Form = () => {
 			</Box>
 			<Box>
 				<Label htmlFor='email'>Email Address</Label>
+				{emailInputIsValid && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
+					$valid={errorEmail}
+					onChange={emailInputChangeHandler}
+					onBlur={emailInputBlurHandler}
 					id='email'
 					type='email'
 					placeholder='e.g. stephenking@lorem.com'
@@ -71,7 +83,11 @@ export const Form = () => {
 			</Box>
 			<Box>
 				<Label htmlFor='phone'>Phone Number</Label>
+				{telIsValid && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
+					onBlur={telInputBlurHandler}
+					onChange={telInputChangeHandler}
+					$valid={errorTel}
 					id='phone'
 					type='tel'
 					placeholder='e.g. +1 234 567 890'

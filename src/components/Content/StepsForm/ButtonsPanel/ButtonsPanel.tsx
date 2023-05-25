@@ -13,8 +13,8 @@ const ButtonBox = styled.div`
 `
 
 const Button = styled.button.attrs<Btn>(props => ({
-	hoverBg: props.hoverBg,
-	hoverFont: props.hoverFont,
+	hoverbgc: props.hoverbgc,
+	hoverfont: props.hoverfont,
 }))`
 	background: ${props => (props.$Bgc ? 'var(--primary)' : 'transparent')};
 	color: ${props => (props.$fontColor ? 'var(--white)' : 'var(--grey)')};
@@ -26,17 +26,17 @@ const Button = styled.button.attrs<Btn>(props => ({
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 	&:hover {
-		background-color: ${props => props.hoverBg};
-		color: ${props => props.hoverFont};
+		background-color: ${props => props.hoverbgc};
+		color: ${props => props.hoverfont};
 	}
 `
 
 export const ButtonsPanel = () => {
 	return (
 		<ButtonBox>
-			<Button hoverFont='var(--primary)'>go back</Button>
+			<Button hoverfont='var(--primary)'>go back</Button>
 			<Button
-				hoverBg='var(--button-hover)'
+				hoverbgc='var(--button-hover)'
 				$fontColor
 				$Bgc>
 				next
