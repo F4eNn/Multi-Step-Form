@@ -4,17 +4,46 @@ import styled from 'styled-components'
 import { HeroBg } from '@/components/Hero/HeroBg'
 import { Content } from '@/components/Content/Content'
 import { useSteps } from '@/hooks/use-steps'
-
+import { useState } from 'react'
+import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
 	width: min(100%, 800px);
 `
+type FormData = {
+	email: string
+	name: string
+	phone: string
+	firstStepValid: boolean
+}
+const INITIAL_DATA: FormData = {
+	email: '',
+	name: '',
+	phone: '',
+	firstStepValid: false,
+}
 
 export default function Home() {
-	const arrayTest = [<div key={'one'}>one</div>, <div key={'two'}>two</div>, <div key={'three'}>thre</div>, <div key={'four'}>four</div>]
+	const [data, setData] = useState(INITIAL_DATA)
 
-	const { nextStep, backStep, currentStepIndex, step} = useSteps(arrayTest)
+	const updateFields = (fields: Partial<FormData>) => {
+		setData(prev => {
+			return { ...prev, ...fields }
+		})
+	}
+	const { nextStep, backStep, step, currentStepIndex, isLastStep, isFirstStep } = useSteps([
+		<PersonalData
+			key={1}
+			phone={data.phone}
+			email={data.email}
+			name={data.name}
+			updateFields={updateFields}
+		/>,
+		<div key={2}>two</div>,
+		<div key={3}>three</div>,
+		<div key={4}>four</div>,
+	])
 	return (
 		<>
 			<Head>
@@ -34,7 +63,12 @@ export default function Home() {
 			</Head>
 			<Main className={ubuntu.className}>
 				<HeroBg />
-				<Content renderStep={step} nextStepHandler={nextStep} backStepHandler={backStep}/>
+				<Content
+					isFirstStep={isFirstStep}
+					step={step}
+					back={backStep}
+					next={nextStep}
+				/>
 			</Main>
 		</>
 	)

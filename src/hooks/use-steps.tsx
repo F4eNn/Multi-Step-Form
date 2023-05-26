@@ -1,5 +1,9 @@
 import { useState, ReactElement } from "react";
 
+
+ 
+
+
 export const useSteps = (steps: ReactElement[]) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0)
 
@@ -15,8 +19,9 @@ export const useSteps = (steps: ReactElement[]) => {
             return index - 1
         })
     }
-    
     return {
+        isLastStep: steps.length,
+        isFirstStep: currentStepIndex === 0,
         nextStep,
         backStep,
         step: steps[currentStepIndex],

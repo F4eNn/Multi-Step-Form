@@ -16,18 +16,22 @@ const Card = styled.div`
 	background-color: var(--white);
 `
 type ContentProps = {
-	renderStep: ReactElement
-	nextStepHandler: () => void
-	backStepHandler: () => void
+	step: ReactElement
+	next: () => void
+	back: () => void
+	isFirstStep: boolean
 }
-export const Content = ({ renderStep, nextStepHandler,backStepHandler }: ContentProps) => {
+
+export const Content = ({ step, back, next, isFirstStep }: ContentProps) => {
 	return (
 		<ContainerContent>
-			<Card>
-				<PersonalData />
-				{renderStep}
-			</Card>
-			<ButtonsPanel backStep={backStepHandler} nextStep={nextStepHandler}/>
+			<Card>{step}</Card>
+
+			<ButtonsPanel
+				isFirstStep={isFirstStep}
+				back={back}
+				next={next}
+			/>
 		</ContainerContent>
 	)
 }
