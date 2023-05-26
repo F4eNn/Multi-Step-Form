@@ -20,7 +20,7 @@ export const useSteps = (steps: ReactElement[]) => {
         })
     }
     return {
-        isLastStep: steps.length,
+        isLastStep: currentStepIndex === steps.length - 1,
         isFirstStep: currentStepIndex === 0,
         nextStep,
         backStep,

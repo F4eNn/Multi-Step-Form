@@ -1,6 +1,5 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle } from 'styled-components'
-import { FormProvider } from '@/store/FormProvider'
 
 const GlobalStyle = createGlobalStyle`
       *,
@@ -33,9 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<GlobalStyle />
-			<FormProvider>
-				<Component {...pageProps} />
-			</FormProvider>
+			<Component {...pageProps} />
 		</>
 	)
 }

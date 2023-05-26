@@ -64,6 +64,8 @@ export default function Home() {
 			<Main className={ubuntu.className}>
 				<HeroBg />
 				<Content
+					firstStepIsValid={data.firstStepValid}
+					isLastStep={isLastStep}
 					isFirstStep={isFirstStep}
 					step={step}
 					back={backStep}

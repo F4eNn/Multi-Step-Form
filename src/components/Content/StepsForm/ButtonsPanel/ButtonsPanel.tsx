@@ -31,14 +31,20 @@ const Button = styled.button<StyledButton>`
 		background-color: ${props => props.bghover};
 		color: ${props => props.colorhover};
 	}
+	&:disabled{
+		background-color: grey;
+		cursor: not-allowed;
+	}
 `
 type ButtonProps = {
 	next: () => void
 	back: () => void
 	isFirstStep: boolean
+	isLastStep: boolean
+	firstStepIsValid: boolean
 }
-export const ButtonsPanel = ({ back, next, isFirstStep }: ButtonProps) => {
-	console.log(isFirstStep)
+export const ButtonsPanel = ({ back, next, isFirstStep, isLastStep, firstStepIsValid }: ButtonProps) => {
+	
 	return (
 		<ButtonBox>
 			{!isFirstStep && (
@@ -51,11 +57,12 @@ export const ButtonsPanel = ({ back, next, isFirstStep }: ButtonProps) => {
 				</Button>
 			)}
 			<Button
+				disabled={!firstStepIsValid}
 				type='button'
 				onClick={next}
 				bghover='var(--button-hover)'
 				$primary>
-				next step
+				{isLastStep ? 'confirm' : 'next step'}
 			</Button>
 		</ButtonBox>
 	)

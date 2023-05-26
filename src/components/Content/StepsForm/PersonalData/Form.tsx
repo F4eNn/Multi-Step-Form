@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { FormContext } from '@/store/form-context'
+import { useEffect, useState } from 'react'
 
 const Box = styled.div`
 	position: relative;
@@ -16,6 +15,7 @@ const Input = styled.input<{ $valid?: string | false }>`
 	&:focus {
 		outline: ${props => props.$valid || '1px solid var(--light-blue)'};
 	}
+	
 `
 const Label = styled.label`
 	color: var(--primary);
@@ -88,6 +88,7 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 			updateFields({ firstStepValid: true })
 			return
 		}
+		updateFields({ firstStepValid: false })
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, email, phone])
 
