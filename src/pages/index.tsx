@@ -6,6 +6,7 @@ import { Content } from '@/components/Content/Content'
 import { useSteps } from '@/hooks/use-steps'
 import { useState } from 'react'
 import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
+import { SubscriptionPlan } from '@/components/Content/StepsForm/SubscriptionPlan/SubscriptionPlan'
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
@@ -40,7 +41,7 @@ export default function Home() {
 			name={data.name}
 			updateFields={updateFields}
 		/>,
-		<div key={2}>two</div>,
+		<SubscriptionPlan key={2} />,
 		<div key={3}>three</div>,
 		<div key={4}>four</div>,
 	])
