@@ -7,6 +7,7 @@ import { useSteps } from '@/hooks/use-steps'
 import { useState } from 'react'
 import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
 import { SubscriptionPlan } from '@/components/Content/StepsForm/SubscriptionPlan/SubscriptionPlan'
+
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
@@ -17,12 +18,14 @@ type FormData = {
 	name: string
 	phone: string
 	firstStepValid: boolean
+	selectedPlanPrice: number
 }
 const INITIAL_DATA: FormData = {
 	email: '',
 	name: '',
 	phone: '',
 	firstStepValid: false,
+	selectedPlanPrice: 9,
 }
 
 export default function Home() {
@@ -33,6 +36,7 @@ export default function Home() {
 			return { ...prev, ...fields }
 		})
 	}
+	console.log(data)
 	const { nextStep, backStep, step, currentStepIndex, isLastStep, isFirstStep } = useSteps([
 		<PersonalData
 			key={1}
@@ -41,7 +45,10 @@ export default function Home() {
 			name={data.name}
 			updateFields={updateFields}
 		/>,
-		<SubscriptionPlan key={2} />,
+		<SubscriptionPlan
+			key={2}
+			updateFields={updateFields}
+		/>,
 		<div key={3}>three</div>,
 		<div key={4}>four</div>,
 	])

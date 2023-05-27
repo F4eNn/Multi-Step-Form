@@ -1,11 +1,6 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
-import { useRef } from 'react'
-
-type StyledButtonProps = {
-	active: any
-}
+import { useEffect, useRef } from 'react'
 
 const Button = styled.button`
 	background-color: transparent;
@@ -40,23 +35,46 @@ const Span = styled.span`
 `
 type PlanItemProps = {
 	title: string
-	price: string
+	price: number
 	img: string
 	activeClass?: string
+	isMonth: boolean
+	updateFields: (field: any) => void
+	listenerActive: boolean
 }
 
-export const PlanItem = ({ img, price, title, activeClass }: PlanItemProps) => {
+export const PlanItem = (props: PlanItemProps) => {
+	const currentPrice = useRef<HTMLElement>(null)
+
+	const getCurrentPrice = () => {
+		const hasActiveClass = currentPrice.current?.closest('button')!.classList.contains('active')
+
+		if (hasActiveClass) {
+			const stringValue = currentPrice.current?.textContent
+			const extractPrice = stringValue?.replace(/\D/g, '')!
+			const changeIntoNumber = +extractPrice
+			props.updateFields({ selectedPlanPrice: changeIntoNumber })
+		}
+	}
+
+	useEffect(() => {
+		getCurrentPrice()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.isMonth, props.listenerActive])
+
 	return (
-		<Button className={activeClass}>
+		<Button
+			onClick={getCurrentPrice}
+			className={props.activeClass}>
 			<Image
-				src={img}
+				src={props.img}
 				alt=''
 				width={40}
 				height={40}
 			/>
 			<Content>
-				<H2>{title}</H2>
-				<Span>{price}</Span>
+				<H2>{props.title}</H2>
+				<Span ref={currentPrice}> {`${props.isMonth ? `$${props.price * 10}/yr` : `$${props.price}/mo`}`}</Span>
 			</Content>
 		</Button>
 	)

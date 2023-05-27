@@ -41,7 +41,11 @@ const Switch = styled.button`
 	}
 `
 
-export const TogglePlan = () => {
+type PlanProps = {
+	getPeriodHelper: (month: boolean) => void
+}
+
+export const TogglePlan = ({ getPeriodHelper }: PlanProps) => {
 	const [isToggle, setIsToggle] = useState(false)
 	const [isMonth, setIsMonth] = useState(true)
 	const [isYear, setIsYear] = useState(false)
@@ -50,6 +54,7 @@ export const TogglePlan = () => {
 		setIsToggle(prev => !prev)
 		setIsYear(prev => !prev)
 		setIsMonth(prev => !prev)
+		getPeriodHelper(isMonth)
 	}
 
 	return (
