@@ -19,6 +19,8 @@ type FormData = {
 	phone: string
 	firstStepValid: boolean
 	selectedPlanPrice: number
+	thisTarget: any
+	thisRef: any
 }
 const INITIAL_DATA: FormData = {
 	email: '',
@@ -26,6 +28,8 @@ const INITIAL_DATA: FormData = {
 	phone: '',
 	firstStepValid: false,
 	selectedPlanPrice: 9,
+	thisTarget:'',
+	thisRef: '' 
 }
 
 export default function Home() {
@@ -36,7 +40,6 @@ export default function Home() {
 			return { ...prev, ...fields }
 		})
 	}
-	console.log(data)
 	const { nextStep, backStep, step, currentStepIndex, isLastStep, isFirstStep } = useSteps([
 		<PersonalData
 			key={1}
@@ -46,12 +49,15 @@ export default function Home() {
 			updateFields={updateFields}
 		/>,
 		<SubscriptionPlan
+			thisTarget={data.thisTarget}
+			thisRef={data.thisRef}
 			key={2}
 			updateFields={updateFields}
 		/>,
 		<div key={3}>three</div>,
 		<div key={4}>four</div>,
 	])
+	// console.log(data)
 	return (
 		<>
 			<Head>

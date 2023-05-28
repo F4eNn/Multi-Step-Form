@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Heading } from '../../Assets/Heading'
 import { PlanItem } from './PlanItem'
 import { TogglePlan } from './TogglePlan'
-
+import Image from 'next/image'
 const PlanContainer = styled.div`
 	margin-top: 1.5rem;
 	display: flex;
@@ -12,24 +12,67 @@ const PlanContainer = styled.div`
 `
 type SubscriptionProps = {
 	updateFields: (field: any) => void
+	thisTarget: any
+	thisRef: any
 }
-export const SubscriptionPlan = ({ updateFields }: SubscriptionProps) => {
+const planVersion = [
+	{
+		id: '1',
+		title: 'Arcade',
+		img: './icon-arcade.svg',
+		price: 9,
+	},
+	{
+		id: '2',
+		title: 'Advance',
+		img: './icon-advanced.svg',
+		price: 12,
+	},
+	{
+		id: '3',
+		title: 'Pro',
+		img: './icon-pro.svg',
+		price: 15,
+	},
+]
+
+export const SubscriptionPlan = ({ updateFields, thisTarget, thisRef }: SubscriptionProps) => {
 	const [monthPlan, setMonthPlan] = useState(false)
 	const [listenerOnActive, setListenerOnActive] = useState(false)
+
+	const buttonRefs = useRef<Array<HTMLButtonElement | null>>([])
 
 	const planContainer = useRef<HTMLDivElement>(null)
 
 	const addActiveClass = (e: React.MouseEvent<HTMLElement>) => {
 		setListenerOnActive(prev => !prev)
-		const buttonsArr = planContainer.current!.childNodes
-		for (const item of buttonsArr) {
-			;(item as HTMLDivElement).classList.remove('active')
-			;(e.target as HTMLButtonElement).classList.add('active')
+		const target = e.target as HTMLElement
+		if (target) {
+			const getAttribute = target.getAttribute('data-item')
+			updateFields({ thisTarget: getAttribute })
+			console.log(thisTarget)
 		}
 	}
+
 	const getPeriodHelper = (month: boolean) => {
 		setMonthPlan(month)
 	}
+
+	const planItem = planVersion.map(item => (
+		<PlanItem
+			key={item.id}
+			id={item.id}
+			img={item.img}
+			title={item.title}
+			price={item.price}
+			updateFields={updateFields}
+			listenerActive={listenerOnActive}
+			isMonth={monthPlan}
+			thisRef={thisRef}
+			thisTarget={thisTarget}
+			onSelect={addActiveClass}
+		/>
+	))
 
 	return (
 		<>
@@ -37,35 +80,7 @@ export const SubscriptionPlan = ({ updateFields }: SubscriptionProps) => {
 				title='Select your plan'
 				description='You have the option of monthly or yearly billing.'
 			/>
-			<PlanContainer
-				ref={planContainer}
-				onClick={addActiveClass}>
-				<PlanItem
-					activeClass='active'
-					title='Arcade'
-					img='./icon-arcade.svg'
-					price={9}
-					isMonth={monthPlan}
-					updateFields={updateFields}
-					listenerActive={listenerOnActive}
-				/>
-				<PlanItem
-					title='Advanced'
-					img='./icon-advanced.svg'
-					price={12}
-					isMonth={monthPlan}
-					updateFields={updateFields}
-					listenerActive={listenerOnActive}
-				/>
-				<PlanItem
-					title='Pro'
-					img='./icon-pro.svg'
-					price={15}
-					isMonth={monthPlan}
-					updateFields={updateFields}
-					listenerActive={listenerOnActive}
-				/>
-			</PlanContainer>
+			<PlanContainer>{planItem}</PlanContainer>
 			<TogglePlan getPeriodHelper={getPeriodHelper} />
 		</>
 	)

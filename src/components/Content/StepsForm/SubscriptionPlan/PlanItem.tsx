@@ -25,7 +25,7 @@ const Content = styled.div`
 	text-align: left;
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
+	gap: 3px;
 `
 const H2 = styled.h2`
 	font-size: 1em;
@@ -33,6 +33,11 @@ const H2 = styled.h2`
 const Span = styled.span`
 	color: var(--grey);
 `
+const Badge = styled.p`
+	color: var(--primary);
+	font-size: 0.9em;
+`
+
 type PlanItemProps = {
 	title: string
 	price: number
@@ -41,12 +46,16 @@ type PlanItemProps = {
 	isMonth: boolean
 	updateFields: (field: any) => void
 	listenerActive: boolean
+	thisRef: any
+	id: string
+	thisTarget: any
+	onSelect: (e?: any) => void
 }
 
 export const PlanItem = (props: PlanItemProps) => {
 	const currentPrice = useRef<HTMLElement>(null)
 
-	const getCurrentPrice = () => {
+	const getCurrentPrice = (e?: any) => {
 		const hasActiveClass = currentPrice.current?.closest('button')!.classList.contains('active')
 
 		if (hasActiveClass) {
@@ -55,6 +64,10 @@ export const PlanItem = (props: PlanItemProps) => {
 			const changeIntoNumber = +extractPrice
 			props.updateFields({ selectedPlanPrice: changeIntoNumber })
 		}
+		// if (e) {
+		// 	console.log(e.target.getAttribute('data-item'))
+		// 	props.updateFields({ thisRef: e.target.getAttribute('data-item') })
+		// }
 	}
 
 	useEffect(() => {
@@ -62,20 +75,42 @@ export const PlanItem = (props: PlanItemProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.isMonth, props.listenerActive])
 
+	// const buttonRef = useRef<any>(null)
+	// useEffect(() => {
+	// 	getCurrentPrice()
+	// 	if (buttonRef.current.classList.contains('active')) {
+	// 		// const elementWithActiveClass = buttonRef.current
+	// 		props.updateFields({ thisRef: buttonRef.current.getAttribute('data-item') })
+	// 		console.log(buttonRef.current.getAttribute('data-item'))
+	// 		// console.log('zawiera')
+	// 	}
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [props.listenerActive])
+	console.log(props.thisTarget)
+
 	return (
-		<Button
-			onClick={getCurrentPrice}
-			className={props.activeClass}>
-			<Image
-				src={props.img}
-				alt=''
-				width={40}
-				height={40}
-			/>
-			<Content>
-				<H2>{props.title}</H2>
-				<Span ref={currentPrice}> {`${props.isMonth ? `$${props.price * 10}/yr` : `$${props.price}/mo`}`}</Span>
-			</Content>
-		</Button>
+		<>
+			<Button
+				data-item={props.id}
+				// ref={buttonRef}
+
+				onClick={() => {
+					getCurrentPrice(),
+					props.onSelect()
+				}}
+				className={props.id === props.thisTarget ? 'active' : ''}>
+				<Image
+					src={props.img}
+					alt=''
+					width={40}
+					height={40}
+				/>
+				<Content>
+					<H2>{props.title}</H2>
+					<Span ref={currentPrice}> {`${props.isMonth ? `$${props.price * 10}/yr` : `$${props.price}/mo`}`}</Span>
+					{props.isMonth ? <Badge>2 months free</Badge> : null}
+				</Content>
+			</Button>
+		</>
 	)
 }
