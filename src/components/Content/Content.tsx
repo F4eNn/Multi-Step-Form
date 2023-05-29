@@ -24,12 +24,20 @@ type ContentProps = {
 	firstStepIsValid: boolean
 }
 
-export const Content = ({ step, back, next, isFirstStep, isLastStep, firstStepIsValid }: ContentProps) => {
+export const Content = ({
+	step,
+	back,
+	next,
+	isFirstStep,
+	isLastStep,
+	firstStepIsValid,
+}: ContentProps) => {
 	return (
 		<ContainerContent>
 			<Card>{step}</Card>
 
 			<ButtonsPanel
+			
 				firstStepIsValid={firstStepIsValid}
 				isLastStep={isLastStep}
 				isFirstStep={isFirstStep}

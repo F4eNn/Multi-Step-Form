@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const Button = styled.button`
 	background-color: transparent;
@@ -15,6 +15,10 @@ const Button = styled.button`
 	&.active {
 		background-color: var(--light-gray);
 		border-color: var(--light-blue);
+	}
+	&.noActive {
+		background-color: red;
+		border-color: red;
 	}
 	&:hover {
 		border-color: var(--light-blue);
@@ -42,20 +46,21 @@ type PlanItemProps = {
 	title: string
 	price: number
 	img: string
-	activeClass?: string
 	isMonth: boolean
-	updateFields: (field: any) => void
-	listenerActive: boolean
-	thisRef: any
+	updateFields: (
+		field: { thisTarget: string | null } | { selectedPlanPrice: number } | { secondStepIsValid: boolean }
+	) => void
 	id: string
-	thisTarget: any
-	onSelect: (e?: any) => void
+	thisTarget: string | null
+	secondStepIsValid: boolean
 }
 
 export const PlanItem = (props: PlanItemProps) => {
+	const [listenerActive, setListenerActive] = useState(false)
+
 	const currentPrice = useRef<HTMLElement>(null)
 
-	const getCurrentPrice = (e?: any) => {
+	const getCurrentPrice = (e?: React.MouseEvent<HTMLButtonElement>) => {
 		const hasActiveClass = currentPrice.current?.closest('button')!.classList.contains('active')
 
 		if (hasActiveClass) {
@@ -64,41 +69,26 @@ export const PlanItem = (props: PlanItemProps) => {
 			const changeIntoNumber = +extractPrice
 			props.updateFields({ selectedPlanPrice: changeIntoNumber })
 		}
-		// if (e) {
-		// 	console.log(e.target.getAttribute('data-item'))
-		// 	props.updateFields({ thisRef: e.target.getAttribute('data-item') })
-		// }
+		if (e) {
+			setListenerActive(prev => !prev)
+			const target = e.target as HTMLButtonElement
+			const attribute = target.getAttribute('data-item')
+			props.updateFields({ thisTarget: attribute })
+			props.updateFields({ secondStepIsValid: true })
+		}
 	}
-
 	useEffect(() => {
 		getCurrentPrice()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.isMonth, props.listenerActive])
-
-	// const buttonRef = useRef<any>(null)
-	// useEffect(() => {
-	// 	getCurrentPrice()
-	// 	if (buttonRef.current.classList.contains('active')) {
-	// 		// const elementWithActiveClass = buttonRef.current
-	// 		props.updateFields({ thisRef: buttonRef.current.getAttribute('data-item') })
-	// 		console.log(buttonRef.current.getAttribute('data-item'))
-	// 		// console.log('zawiera')
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [props.listenerActive])
-	console.log(props.thisTarget)
-
+	}, [props.isMonth, listenerActive])
 	return (
 		<>
 			<Button
 				data-item={props.id}
-				// ref={buttonRef}
-
-				onClick={() => {
-					getCurrentPrice(),
-					props.onSelect()
-				}}
-				className={props.id === props.thisTarget ? 'active' : ''}>
+				onClick={getCurrentPrice}
+				className={
+					props.secondStepIsValid ? `${props.id === props.thisTarget && 'active'}` : `${props.id === '1' && 'active'}`
+				}>
 				<Image
 					src={props.img}
 					alt=''

@@ -1,9 +1,8 @@
 import styled from 'styled-components'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { Heading } from '../../Assets/Heading'
 import { PlanItem } from './PlanItem'
 import { TogglePlan } from './TogglePlan'
-import Image from 'next/image'
 const PlanContainer = styled.div`
 	margin-top: 1.5rem;
 	display: flex;
@@ -11,9 +10,11 @@ const PlanContainer = styled.div`
 	gap: 10px;
 `
 type SubscriptionProps = {
-	updateFields: (field: any) => void
-	thisTarget: any
-	thisRef: any
+	updateFields: (
+		field: { thisTarget: string | null } | { selectedPlanPrice: number } | { secondStepIsValid: boolean }
+	) => void
+	thisTarget: string | null
+	secondStepIsValid: boolean
 }
 const planVersion = [
 	{
@@ -36,44 +37,24 @@ const planVersion = [
 	},
 ]
 
-export const SubscriptionPlan = ({ updateFields, thisTarget, thisRef }: SubscriptionProps) => {
+export const SubscriptionPlan = ({ updateFields, thisTarget, secondStepIsValid }: SubscriptionProps) => {
 	const [monthPlan, setMonthPlan] = useState(false)
-	const [listenerOnActive, setListenerOnActive] = useState(false)
-
-	const buttonRefs = useRef<Array<HTMLButtonElement | null>>([])
-
-	const planContainer = useRef<HTMLDivElement>(null)
-
-	const addActiveClass = (e: React.MouseEvent<HTMLElement>) => {
-		setListenerOnActive(prev => !prev)
-		const target = e.target as HTMLElement
-		if (target) {
-			const getAttribute = target.getAttribute('data-item')
-			updateFields({ thisTarget: getAttribute })
-			console.log(thisTarget)
-		}
-	}
-
 	const getPeriodHelper = (month: boolean) => {
 		setMonthPlan(month)
 	}
-
 	const planItem = planVersion.map(item => (
 		<PlanItem
+			secondStepIsValid={secondStepIsValid}
 			key={item.id}
 			id={item.id}
 			img={item.img}
 			title={item.title}
 			price={item.price}
 			updateFields={updateFields}
-			listenerActive={listenerOnActive}
 			isMonth={monthPlan}
-			thisRef={thisRef}
 			thisTarget={thisTarget}
-			onSelect={addActiveClass}
 		/>
 	))
-
 	return (
 		<>
 			<Heading
