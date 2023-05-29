@@ -4,15 +4,7 @@ import { Content } from '../SubscriptionPlan/PlanItem'
 import { H2 } from '../SubscriptionPlan/PlanItem'
 import { Span } from '../SubscriptionPlan/PlanItem'
 import Image from 'next/image'
-
-type EnhancesProps = {
-	id: string
-	img: string
-	title: string
-	desc: string
-	price: number
-	toggleStatePlans: boolean
-}
+import { useRef, useState } from 'react'
 const PriceBox = styled.div`
 	margin-left: auto;
 `
@@ -33,12 +25,47 @@ const Checkbox = styled.div`
 	}
 `
 
+type EnhancesProps = {
+	id: string
+	updateFields: (fields: any) => void
+	img: string
+	title: string
+	desc: string
+	price: number
+	toggleStatePlans: boolean
+	onlineService: string
+	largerStorage: string
+	customProfile: string
+}
 export const EnhancesItem = (props: EnhancesProps) => {
+	const toggleClass = (e: React.MouseEvent<HTMLButtonElement>) => {
+		const target = e.target as HTMLButtonElement
+		const buttonTarget = target.closest('button')
+		const itemId = buttonTarget?.getAttribute('data-item')
+
+        console.log(buttonTarget?.classList.toggle('active'))
+        
+		switch (itemId) {
+			case '1':
+				props.updateFields({ onlineService: itemId })
+				break
+			case '2':
+				props.updateFields({ largerStorage: itemId })
+				break
+			case '3':
+				props.updateFields({ customProfile: itemId })
+				break
+		}
+	}
 
 	const relevantPrice = props.toggleStatePlans ? `+$${props.price * 10}/yr` : `+$${props.price}/mo`
+	const addClass = props.customProfile === props.id ? 'active' : ''
 	return (
-		<Button data-item={props.id}>
-			<Checkbox className='checked'>
+		<Button
+			onClick={toggleClass}
+			className={addClass}
+			data-item={props.id}>
+			<Checkbox>
 				<Image
 					src={props.img}
 					alt=''

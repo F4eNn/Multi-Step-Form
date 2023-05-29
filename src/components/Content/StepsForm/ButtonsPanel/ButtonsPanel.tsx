@@ -65,7 +65,7 @@ export const ButtonsPanel = ({
 				</Button>
 			)}
 			<Button
-				disabled={!firstStepIsValid}
+				// disabled={!firstStepIsValid}
 				type='button'
 				onClick={next}
 				bghover='var(--button-hover)'

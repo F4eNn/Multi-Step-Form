@@ -21,7 +21,9 @@ type FormData = {
 	selectedPlanPrice: number
 	selectedPlan: string
 	toggleStatePlans: boolean
-	selectedAddons: string
+	onlineService: string
+	largerStorage: string
+	customProfile: string
 }
 const INITIAL_DATA: FormData = {
 	email: '',
@@ -30,8 +32,10 @@ const INITIAL_DATA: FormData = {
 	firstStepValid: false,
 	selectedPlanPrice: 9,
 	selectedPlan: '1',
-	selectedAddons: '3',
 	toggleStatePlans: false,
+	onlineService: '',
+	largerStorage: '',
+	customProfile: ''
 }
 
 export default function Home() {
@@ -58,7 +62,10 @@ export default function Home() {
 		/>,
 		<Enhances
 			key={3}
+			onlineService={data.onlineService}
 			toggleStatePlans={data.toggleStatePlans}
+			largerStorage={data.largerStorage}
+			customProfile={data.customProfile}
 			updateFields={updateFields}
 		/>,
 		<div key={4}>four</div>,

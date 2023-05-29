@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { EnhancesItem } from './EnhancesItem'
 import { Heading } from '../../Assets/Heading'
 import { PlanContainer } from '../SubscriptionPlan/SubscriptionPlan'
-
+import { useRef } from 'react'
 const addons = [
 	{
 		id: '1',
@@ -29,7 +29,10 @@ const addons = [
 
 type EnhancesProps = {
 	updateFields: (fields: any) => void
-    toggleStatePlans: boolean
+	toggleStatePlans: boolean
+	onlineService: string
+	largerStorage: string
+    customProfile: string
 }
 
 export const Enhances = (props: EnhancesProps) => {
@@ -41,7 +44,11 @@ export const Enhances = (props: EnhancesProps) => {
 			desc={addon.desc}
 			title={addon.title}
 			price={addon.price}
-            toggleStatePlans={props.toggleStatePlans}
+			toggleStatePlans={props.toggleStatePlans}
+			onlineService={props.onlineService}
+			updateFields={props.updateFields}
+			largerStorage={props.largerStorage}
+            customProfile={props.customProfile}
 		/>
 	))
 
