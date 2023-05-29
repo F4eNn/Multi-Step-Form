@@ -42,29 +42,30 @@ const Switch = styled.button`
 `
 
 type PlanProps = {
-	getPeriodHelper: (month: boolean) => void
+	// getPeriodHelper: (month: boolean) => void
+	updateFields: (fields: any) => void
+	toggleStatePlans: boolean
 }
 
-export const TogglePlan = ({ getPeriodHelper }: PlanProps) => {
-	const [isToggle, setIsToggle] = useState(false)
-	const [isMonth, setIsMonth] = useState(true)
-	const [isYear, setIsYear] = useState(false)
-
+export const TogglePlan = (props: PlanProps) => {
 	const switchPlan = () => {
-		setIsToggle(prev => !prev)
-		setIsYear(prev => !prev)
-		setIsMonth(prev => !prev)
-		getPeriodHelper(isMonth)
+		if (!props.toggleStatePlans) {
+			props.updateFields({ toggleStatePlans: true })
+			return
+		}
+		if (props.toggleStatePlans) {
+			props.updateFields({ toggleStatePlans: false })
+			return
+		}
 	}
-
 	return (
 		<ToggleBox>
-			<H3 $monthly={`${isMonth ? 'var(--primary)' : 'var(--grey)'} `}>Monthly</H3>
+			<H3 $monthly={`${!props.toggleStatePlans ? 'var(--primary)' : 'var(--grey)'} `}>Monthly</H3>
 			<Switch
 				onClick={switchPlan}
-				className={`${isToggle ? 'switch_plan' : null}`}
+				className={`${props.toggleStatePlans ? 'switch_plan' : null}`}
 			/>
-			<H3 $yearly={`${isYear ? 'var(--primary)' : 'var(--grey)'}`}>Yearly</H3>
+			<H3 $yearly={`${props.toggleStatePlans ? 'var(--primary)' : 'var(--grey)'}`}>Yearly</H3>
 		</ToggleBox>
 	)
 }

@@ -7,7 +7,7 @@ import { useSteps } from '@/hooks/use-steps'
 import { useState } from 'react'
 import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
 import { SubscriptionPlan } from '@/components/Content/StepsForm/SubscriptionPlan/SubscriptionPlan'
-
+import { Enhances } from '@/components/Content/StepsForm/Enhances/Enhances'
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
@@ -19,8 +19,9 @@ type FormData = {
 	phone: string
 	firstStepValid: boolean
 	selectedPlanPrice: number
-	thisTarget: string | null
-	secondStepIsValid: boolean
+	selectedPlan: string
+	toggleStatePlans: boolean
+	selectedAddons: string
 }
 const INITIAL_DATA: FormData = {
 	email: '',
@@ -28,8 +29,9 @@ const INITIAL_DATA: FormData = {
 	phone: '',
 	firstStepValid: false,
 	selectedPlanPrice: 9,
-	thisTarget: '',
-	secondStepIsValid: false,
+	selectedPlan: '1',
+	selectedAddons: '3',
+	toggleStatePlans: false,
 }
 
 export default function Home() {
@@ -49,15 +51,18 @@ export default function Home() {
 			updateFields={updateFields}
 		/>,
 		<SubscriptionPlan
-			thisTarget={data.thisTarget}
-			secondStepIsValid={data.secondStepIsValid}
 			key={2}
+			selectedPlan={data.selectedPlan}
+			updateFields={updateFields}
+			toggleStatePlans={data.toggleStatePlans}
+		/>,
+		<Enhances
+			key={3}
+			toggleStatePlans={data.toggleStatePlans}
 			updateFields={updateFields}
 		/>,
-		<div key={3}>three</div>,
 		<div key={4}>four</div>,
 	])
-	console.log(data)
 	return (
 		<>
 			<Head>

@@ -3,18 +3,16 @@ import { useState } from 'react'
 import { Heading } from '../../Assets/Heading'
 import { PlanItem } from './PlanItem'
 import { TogglePlan } from './TogglePlan'
-const PlanContainer = styled.div`
+export const PlanContainer = styled.div`
 	margin-top: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 `
 type SubscriptionProps = {
-	updateFields: (
-		field: { thisTarget: string | null } | { selectedPlanPrice: number } | { secondStepIsValid: boolean }
-	) => void
-	thisTarget: string | null
-	secondStepIsValid: boolean
+	updateFields: (field: { selectedPlan: string } | { selectedPlanPrice: number }) => void
+	selectedPlan: string | null
+	toggleStatePlans: boolean
 }
 const planVersion = [
 	{
@@ -37,22 +35,17 @@ const planVersion = [
 	},
 ]
 
-export const SubscriptionPlan = ({ updateFields, thisTarget, secondStepIsValid }: SubscriptionProps) => {
-	const [monthPlan, setMonthPlan] = useState(false)
-	const getPeriodHelper = (month: boolean) => {
-		setMonthPlan(month)
-	}
+export const SubscriptionPlan = ({ updateFields, selectedPlan, toggleStatePlans }: SubscriptionProps) => {
 	const planItem = planVersion.map(item => (
 		<PlanItem
-			secondStepIsValid={secondStepIsValid}
 			key={item.id}
 			id={item.id}
 			img={item.img}
 			title={item.title}
 			price={item.price}
 			updateFields={updateFields}
-			isMonth={monthPlan}
-			thisTarget={thisTarget}
+			selectedPlan={selectedPlan}
+			toggleStatePlans={toggleStatePlans}
 		/>
 	))
 	return (
@@ -62,7 +55,10 @@ export const SubscriptionPlan = ({ updateFields, thisTarget, secondStepIsValid }
 				description='You have the option of monthly or yearly billing.'
 			/>
 			<PlanContainer>{planItem}</PlanContainer>
-			<TogglePlan getPeriodHelper={getPeriodHelper} />
+			<TogglePlan
+				toggleStatePlans={toggleStatePlans}
+				updateFields={updateFields}
+			/>
 		</>
 	)
 }

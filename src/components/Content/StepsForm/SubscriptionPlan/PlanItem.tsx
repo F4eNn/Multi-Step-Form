@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
-const Button = styled.button`
+export const Button = styled.button`
 	background-color: transparent;
 	padding: 1rem;
 	border: 1px solid var(--border-color);
@@ -25,16 +25,16 @@ const Button = styled.button`
 	}
 `
 
-const Content = styled.div`
+export const Content = styled.div`
 	text-align: left;
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
 `
-const H2 = styled.h2`
+export const H2 = styled.h2`
 	font-size: 1em;
 `
-const Span = styled.span`
+export const Span = styled.span`
 	color: var(--grey);
 `
 const Badge = styled.p`
@@ -46,21 +46,17 @@ type PlanItemProps = {
 	title: string
 	price: number
 	img: string
-	isMonth: boolean
-	updateFields: (
-		field: { thisTarget: string | null } | { selectedPlanPrice: number } | { secondStepIsValid: boolean }
-	) => void
+	updateFields: (field: { selectedPlan: string } | { selectedPlanPrice: number }) => void
 	id: string
-	thisTarget: string | null
-	secondStepIsValid: boolean
+	selectedPlan: string | null
+	toggleStatePlans: boolean
 }
 
 export const PlanItem = (props: PlanItemProps) => {
 	const [listenerActive, setListenerActive] = useState(false)
-
 	const currentPrice = useRef<HTMLElement>(null)
 
-	const getCurrentPrice = (e?: React.MouseEvent<HTMLButtonElement>) => {
+	const getCurrentPrice = () => {
 		const hasActiveClass = currentPrice.current?.closest('button')!.classList.contains('active')
 
 		if (hasActiveClass) {
@@ -69,26 +65,30 @@ export const PlanItem = (props: PlanItemProps) => {
 			const changeIntoNumber = +extractPrice
 			props.updateFields({ selectedPlanPrice: changeIntoNumber })
 		}
-		if (e) {
-			setListenerActive(prev => !prev)
-			const target = e.target as HTMLButtonElement
-			const attribute = target.getAttribute('data-item')
-			props.updateFields({ thisTarget: attribute })
-			props.updateFields({ secondStepIsValid: true })
-		}
+	}
+	const addActiveClass = (e: React.MouseEvent<HTMLButtonElement>) => {
+		setListenerActive(prev => !prev)
+		const target = e.target as HTMLButtonElement
+		const buttonTarget = target.closest('button')!
+		const attribute = buttonTarget.getAttribute('data-item')
+		if (attribute) props.updateFields({ selectedPlan: attribute })
 	}
 	useEffect(() => {
 		getCurrentPrice()
+		return () => {}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.isMonth, listenerActive])
+	}, [props.toggleStatePlans, listenerActive])
+
+	const relevantPrice = !props.toggleStatePlans ? `$${props.price}/mo` : `$${props.price * 10}/yr`
 	return (
 		<>
 			<Button
 				data-item={props.id}
-				onClick={getCurrentPrice}
-				className={
-					props.secondStepIsValid ? `${props.id === props.thisTarget && 'active'}` : `${props.id === '1' && 'active'}`
-				}>
+				onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+					getCurrentPrice()
+					addActiveClass(e)
+				}}
+				className={props.id === props.selectedPlan ? 'active' : ''}>
 				<Image
 					src={props.img}
 					alt=''
@@ -97,8 +97,8 @@ export const PlanItem = (props: PlanItemProps) => {
 				/>
 				<Content>
 					<H2>{props.title}</H2>
-					<Span ref={currentPrice}> {`${props.isMonth ? `$${props.price * 10}/yr` : `$${props.price}/mo`}`}</Span>
-					{props.isMonth ? <Badge>2 months free</Badge> : null}
+					<Span ref={currentPrice}>{relevantPrice}</Span>
+					{props.toggleStatePlans && <Badge>2 months free</Badge>}
 				</Content>
 			</Button>
 		</>
