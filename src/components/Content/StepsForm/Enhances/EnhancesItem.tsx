@@ -4,7 +4,8 @@ import { Content } from '../SubscriptionPlan/PlanItem'
 import { H2 } from '../SubscriptionPlan/PlanItem'
 import { Span } from '../SubscriptionPlan/PlanItem'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
+
 const PriceBox = styled.div`
 	margin-left: auto;
 `
@@ -37,35 +38,67 @@ type EnhancesProps = {
 	largerStorage: string
 	customProfile: string
 }
+
 export const EnhancesItem = (props: EnhancesProps) => {
+	const addonsPrice = useRef<HTMLSpanElement>(null)
+
 	const toggleClass = (e: React.MouseEvent<HTMLButtonElement>) => {
 		const target = e.target as HTMLButtonElement
 		const buttonTarget = target.closest('button')
+		const hasActiveTarget = buttonTarget?.classList.contains('active')
 		const itemId = buttonTarget?.getAttribute('data-item')
 
-        console.log(buttonTarget?.classList.toggle('active'))
-        
+		if (hasActiveTarget) {
+			if (buttonTarget?.getAttribute('data-item') === itemId) {
+				switch (itemId) {
+					case '1':
+						props.updateFields({ onlineService: '' })
+						props.updateFields({ onlineServicePrice: 0 })
+
+						break
+					case '2':
+						props.updateFields({ largerStorage: '' })
+						props.updateFields({ largerStoragePrice: 0 })
+
+						break
+					case '3':
+						props.updateFields({ customProfile: '' })
+						props.updateFields({ customProfilePrice: 0 })
+
+						break
+				}
+				return
+			}
+		}
+
 		switch (itemId) {
 			case '1':
 				props.updateFields({ onlineService: itemId })
+				props.updateFields({ onlineServicePrice: 1 })
 				break
 			case '2':
 				props.updateFields({ largerStorage: itemId })
+				props.updateFields({ largerStoragePrice: 2 })
 				break
 			case '3':
 				props.updateFields({ customProfile: itemId })
+
+				props.updateFields({ customProfilePrice: 2 })
 				break
 		}
 	}
 
+	const myAddons = [props.onlineService, props.customProfile, props.largerStorage]
+
+	const addClass = myAddons.includes(props.id) ? 'active' : ''
+	const addChecked = myAddons.includes(props.id) ? 'checked' : 'removeChecked'
 	const relevantPrice = props.toggleStatePlans ? `+$${props.price * 10}/yr` : `+$${props.price}/mo`
-	const addClass = props.customProfile === props.id ? 'active' : ''
 	return (
 		<Button
 			onClick={toggleClass}
 			className={addClass}
 			data-item={props.id}>
-			<Checkbox>
+			<Checkbox className={addChecked}>
 				<Image
 					src={props.img}
 					alt=''
@@ -78,7 +111,7 @@ export const EnhancesItem = (props: EnhancesProps) => {
 				<Span>{props.desc}</Span>
 			</Content>
 			<PriceBox>
-				<Price>{relevantPrice}</Price>
+				<Price ref={addonsPrice}>{relevantPrice}</Price>
 			</PriceBox>
 		</Button>
 	)

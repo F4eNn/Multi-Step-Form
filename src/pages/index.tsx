@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { HeroBg } from '@/components/Hero/HeroBg'
 import { Content } from '@/components/Content/Content'
 import { useSteps } from '@/hooks/use-steps'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
 import { SubscriptionPlan } from '@/components/Content/StepsForm/SubscriptionPlan/SubscriptionPlan'
 import { Enhances } from '@/components/Content/StepsForm/Enhances/Enhances'
@@ -24,6 +24,9 @@ type FormData = {
 	onlineService: string
 	largerStorage: string
 	customProfile: string
+	onlineServicePrice: number
+	largerStoragePrice: number
+	customProfilePrice: number
 }
 const INITIAL_DATA: FormData = {
 	email: '',
@@ -35,7 +38,10 @@ const INITIAL_DATA: FormData = {
 	toggleStatePlans: false,
 	onlineService: '',
 	largerStorage: '',
-	customProfile: ''
+	customProfile: '',
+	onlineServicePrice: 0,
+	largerStoragePrice: 0,
+	customProfilePrice: 0,
 }
 
 export default function Home() {
@@ -70,6 +76,8 @@ export default function Home() {
 		/>,
 		<div key={4}>four</div>,
 	])
+	
+	console.log(data)
 	return (
 		<>
 			<Head>

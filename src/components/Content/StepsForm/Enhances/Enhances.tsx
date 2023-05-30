@@ -32,7 +32,7 @@ type EnhancesProps = {
 	toggleStatePlans: boolean
 	onlineService: string
 	largerStorage: string
-    customProfile: string
+	customProfile: string
 }
 
 export const Enhances = (props: EnhancesProps) => {
@@ -48,7 +48,7 @@ export const Enhances = (props: EnhancesProps) => {
 			onlineService={props.onlineService}
 			updateFields={props.updateFields}
 			largerStorage={props.largerStorage}
-            customProfile={props.customProfile}
+			customProfile={props.customProfile}
 		/>
 	))
 
