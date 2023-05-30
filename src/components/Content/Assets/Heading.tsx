@@ -1,14 +1,17 @@
 import styled from 'styled-components'
 
 export const StepDescription = styled.p`
-	color: var(--grey);
-	font-size: 1em;
+	color: var(--gray);
+	font-size: .7em;
+	font-weight: 400;
+	line-height: 25px;
+	margin-bottom: 1.2rem;
 `
 
 export const H1 = styled.h1`
 	color: var(--primary);
 	font-size: 1.4em;
-	margin-bottom: 1rem;
+	margin-bottom: .6rem;
 `
 
 type HeadingProps = {

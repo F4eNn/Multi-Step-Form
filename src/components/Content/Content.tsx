@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { PersonalData } from './StepsForm/PersonalData/PersonalData'
 import { ButtonsPanel } from './StepsForm/ButtonsPanel/ButtonsPanel'
 import { ReactElement } from 'react'
 
@@ -8,12 +7,16 @@ const ContainerContent = styled.div``
 const Card = styled.div`
 	margin-inline: auto;
 	position: relative;
-	top: -50px;
+	top: -45px;
 	width: 90%;
-	padding: 1.5rem;
+	padding: 2rem 1.5rem;
 	border-radius: 10px;
-	font-size: clamp(1em, 2.5vw, 1.5em);
+	font-size: clamp(1.05em, 2.5vw, 1.5em);
 	background-color: var(--white);
+	@media (min-width: 768px) {
+		top: 0;
+		width: 475px;
+	}
 `
 type ContentProps = {
 	step: ReactElement
@@ -22,6 +25,7 @@ type ContentProps = {
 	isFirstStep: boolean
 	isLastStep: boolean
 	firstStepIsValid: boolean
+	currentStepIndex: number
 }
 
 export const Content = ({
@@ -31,19 +35,22 @@ export const Content = ({
 	isFirstStep,
 	isLastStep,
 	firstStepIsValid,
+	currentStepIndex,
 }: ContentProps) => {
+	const hideButtons = currentStepIndex === 4
 	return (
 		<ContainerContent>
 			<Card>{step}</Card>
 
-			<ButtonsPanel
-			
-				firstStepIsValid={firstStepIsValid}
-				isLastStep={isLastStep}
-				isFirstStep={isFirstStep}
-				back={back}
-				next={next}
-			/>
+			{!hideButtons && (
+				<ButtonsPanel
+					firstStepIsValid={firstStepIsValid}
+					isLastStep={isLastStep}
+					isFirstStep={isFirstStep}
+					back={back}
+					next={next}
+				/>
+			)}
 		</ContainerContent>
 	)
 }

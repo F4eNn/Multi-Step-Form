@@ -6,6 +6,14 @@ import { Span } from '../SubscriptionPlan/PlanItem'
 import Image from 'next/image'
 import { useRef } from 'react'
 
+const AddonsButton = styled(Button)`
+	@media (min-width: 768px) {
+		flex-direction: row;
+		align-items: center;
+		height: auto;
+	}
+`
+
 const PriceBox = styled.div`
 	margin-left: auto;
 `
@@ -47,7 +55,6 @@ export const EnhancesItem = (props: EnhancesProps) => {
 		const buttonTarget = target.closest('button')
 		const hasActiveTarget = buttonTarget?.classList.contains('active')
 		const itemId = buttonTarget?.getAttribute('data-item')
-
 		if (hasActiveTarget) {
 			if (buttonTarget?.getAttribute('data-item') === itemId) {
 				switch (itemId) {
@@ -87,14 +94,13 @@ export const EnhancesItem = (props: EnhancesProps) => {
 				break
 		}
 	}
-
 	const myAddons = [props.onlineService, props.customProfile, props.largerStorage]
-
 	const addClass = myAddons.includes(props.id) ? 'active' : ''
 	const addChecked = myAddons.includes(props.id) ? 'checked' : 'removeChecked'
 	const relevantPrice = props.toggleStatePlans ? `+$${props.price * 10}/yr` : `+$${props.price}/mo`
+
 	return (
-		<Button
+		<AddonsButton
 			onClick={toggleClass}
 			className={addClass}
 			data-item={props.id}>
@@ -113,6 +119,6 @@ export const EnhancesItem = (props: EnhancesProps) => {
 			<PriceBox>
 				<Price ref={addonsPrice}>{relevantPrice}</Price>
 			</PriceBox>
-		</Button>
+		</AddonsButton>
 	)
 }

@@ -16,15 +16,25 @@ const GlobalStyle = createGlobalStyle`
 	--primary: #022959;
 	--light-gray: #f8f9ff;
 	--border-color: #d6d9e6;
-	--grey: #9699aa;
+	--gray: #9699aa;
 	--active: #bee2fd;
 	--error: #ee374a;
 	--button-hover: #164a8a;
+	--step-color: #bee2fd;
+	--very-light-gray: #e4e5ee;
+	--skye-blue: #abbcff;
+	
 }
+
 body {
 	height: 100svh;
 	height: 100vh;
 	background-color: var(--body-bgc);
+	@media (min-width: 768px){
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 `
 

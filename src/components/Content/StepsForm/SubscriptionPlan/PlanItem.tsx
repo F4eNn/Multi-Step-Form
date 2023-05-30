@@ -16,12 +16,14 @@ export const Button = styled.button`
 		background-color: var(--light-gray);
 		border-color: var(--light-blue);
 	}
-	&.noActive {
-		background-color: red;
-		border-color: red;
-	}
 	&:hover {
 		border-color: var(--light-blue);
+	}
+	@media (min-width: 768px) {
+		height: 145px;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
 	}
 `
 
@@ -46,7 +48,13 @@ type PlanItemProps = {
 	title: string
 	price: number
 	img: string
-	updateFields: (field: { selectedPlan: string } | { selectedPlanPrice: number }) => void
+	updateFields: (
+		field:
+			| { selectedPlan: string }
+			| { selectedPlanPrice: number }
+			| { choosedPlan: string }
+			| { goBackToPlans: boolean }
+	) => void
 	id: string
 	selectedPlan: string | null
 	toggleStatePlans: boolean
@@ -58,12 +66,13 @@ export const PlanItem = (props: PlanItemProps) => {
 
 	const getCurrentPrice = () => {
 		const hasActiveClass = currentPrice.current?.closest('button')!.classList.contains('active')
-
+		const choosedPlan = currentPrice.current?.previousElementSibling?.textContent!
 		if (hasActiveClass) {
 			const stringValue = currentPrice.current?.textContent
 			const extractPrice = stringValue?.replace(/\D/g, '')!
 			const changeIntoNumber = +extractPrice
 			props.updateFields({ selectedPlanPrice: changeIntoNumber })
+			props.updateFields({ choosedPlan: choosedPlan })
 		}
 	}
 	const addActiveClass = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,6 +84,7 @@ export const PlanItem = (props: PlanItemProps) => {
 	}
 	useEffect(() => {
 		getCurrentPrice()
+		props.updateFields({ goBackToPlans: false })
 		return () => {}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.toggleStatePlans, listenerActive])

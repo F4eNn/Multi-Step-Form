@@ -5,21 +5,25 @@ const Box = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
-	margin-top: 0.8rem;
+	gap: 4px;
+	margin-top: 1rem;
 `
 const Input = styled.input<{ $valid?: string | false }>`
-	padding: 0.5rem 1rem;
+	padding: 0.7rem 1rem;
 	border-radius: 5px;
 	border: ${props => props.$valid || '1px solid var(--border-color)'};
 	&:focus {
 		outline: ${props => props.$valid || '1px solid var(--light-blue)'};
 	}
+	&::placeholder{
+		font-size: 1.1em;
+	}
 	
 `
 const Label = styled.label`
 	color: var(--primary);
-	font-size: 0.7em;
+	font-size: 0.75em;
+
 `
 const ErrorMsg = styled.p`
 	position: absolute;
@@ -47,6 +51,8 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 	const [nameIsValid, setNameIsValid] = useState(false)
 	const [EmailIsValid, setEmailIsValid] = useState(false)
 	const [phoneIsValid, setPhoneIsValid] = useState(false)
+
+	const [debouncedInputs, setDebouncedInputs] = useState<any>('')
 
 	const phoneValidity = telRegex.test(phone)
 	const emailValidity = emailRegex.test(email)
@@ -89,13 +95,19 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 			return
 		}
 		updateFields({ firstStepValid: false })
+		const timeoutId = setTimeout(() => {
+			setDebouncedInputs(name)
+		}, 5000)
+		
+		
+		return () => clearTimeout(timeoutId)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, email, phone])
+	}, [name, email, phone, 5000])
+	console.log(name)
 
 	const errorName = nameIsValid && '1px solid var(--error)'
 	const errorEmail = EmailIsValid && '1px solid var(--error)'
 	const errorTel = phoneIsValid && '1px solid var(--error)'
-
 	return (
 		<form>
 			<Box>

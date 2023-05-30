@@ -4,29 +4,43 @@ import styled from 'styled-components'
 import { HeroBg } from '@/components/Hero/HeroBg'
 import { Content } from '@/components/Content/Content'
 import { useSteps } from '@/hooks/use-steps'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PersonalData } from '@/components/Content/StepsForm/PersonalData/PersonalData'
 import { SubscriptionPlan } from '@/components/Content/StepsForm/SubscriptionPlan/SubscriptionPlan'
 import { Enhances } from '@/components/Content/StepsForm/Enhances/Enhances'
+import { Summary } from '@/components/Content/StepsForm/Summary/Summary'
+import { Confirmation } from '@/components/Content/StepsForm/Confirmation/Confirmation'
 const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
-	width: min(100%, 800px);
+	width: 100%;
+	
+	@media (min-width: 768px){
+		position: relative;
+		display: flex;
+		gap: 3.5rem;
+		background-color: #fff;
+		border-radius: 10px;
+		padding: .8rem;
+		height: 500px;
+	}
 `
 type FormData = {
-	email: string
-	name: string
-	phone: string
 	firstStepValid: boolean
-	selectedPlanPrice: number
-	selectedPlan: string
 	toggleStatePlans: boolean
-	onlineService: string
-	largerStorage: string
-	customProfile: string
+	goBackToPlans: boolean
+	selectedPlanPrice: number
 	onlineServicePrice: number
 	largerStoragePrice: number
 	customProfilePrice: number
+	email: string
+	name: string
+	phone: string
+	selectedPlan: string
+	choosedPlan: string
+	onlineService: string
+	largerStorage: string
+	customProfile: string
 }
 const INITIAL_DATA: FormData = {
 	email: '',
@@ -35,6 +49,8 @@ const INITIAL_DATA: FormData = {
 	firstStepValid: false,
 	selectedPlanPrice: 9,
 	selectedPlan: '1',
+	choosedPlan: 'Arcade',
+	goBackToPlans: false,
 	toggleStatePlans: false,
 	onlineService: '',
 	largerStorage: '',
@@ -46,38 +62,49 @@ const INITIAL_DATA: FormData = {
 
 export default function Home() {
 	const [data, setData] = useState(INITIAL_DATA)
-
 	const updateFields = (fields: Partial<FormData>) => {
 		setData(prev => {
 			return { ...prev, ...fields }
 		})
 	}
-	const { nextStep, backStep, step, currentStepIndex, isLastStep, isFirstStep } = useSteps([
-		<PersonalData
-			key={1}
-			phone={data.phone}
-			email={data.email}
-			name={data.name}
-			updateFields={updateFields}
-		/>,
-		<SubscriptionPlan
-			key={2}
-			selectedPlan={data.selectedPlan}
-			updateFields={updateFields}
-			toggleStatePlans={data.toggleStatePlans}
-		/>,
-		<Enhances
-			key={3}
-			onlineService={data.onlineService}
-			toggleStatePlans={data.toggleStatePlans}
-			largerStorage={data.largerStorage}
-			customProfile={data.customProfile}
-			updateFields={updateFields}
-		/>,
-		<div key={4}>four</div>,
-	])
-	
-	console.log(data)
+	const { nextStep, backStep, currentStepIndex, step, isLastStep, isFirstStep } = useSteps(
+		[
+			<PersonalData
+				key={1}
+				phone={data.phone}
+				email={data.email}
+				name={data.name}
+				updateFields={updateFields}
+			/>,
+			<SubscriptionPlan
+				key={2}
+				selectedPlan={data.selectedPlan}
+				updateFields={updateFields}
+				toggleStatePlans={data.toggleStatePlans}
+			/>,
+			<Enhances
+				key={3}
+				onlineService={data.onlineService}
+				toggleStatePlans={data.toggleStatePlans}
+				largerStorage={data.largerStorage}
+				customProfile={data.customProfile}
+				updateFields={updateFields}
+			/>,
+			<Summary
+				key={4}
+				choosedPlan={data.choosedPlan}
+				togglePlan={data.toggleStatePlans}
+				updateFields={updateFields}
+				customProfilePrice={data.customProfilePrice}
+				largerStoragePrice={data.largerStoragePrice}
+				onlineServicePrice={data.onlineServicePrice}
+				selectedPlanPrice={data.selectedPlanPrice}
+			/>,
+			<Confirmation key={5} />,
+		],
+		data.goBackToPlans
+	)
+
 	return (
 		<>
 			<Head>
@@ -96,8 +123,9 @@ export default function Home() {
 				/>
 			</Head>
 			<Main className={ubuntu.className}>
-				<HeroBg />
+				<HeroBg currentIndex={currentStepIndex}/>
 				<Content
+					currentStepIndex={currentStepIndex}
 					firstStepIsValid={data.firstStepValid}
 					isLastStep={isLastStep}
 					isFirstStep={isFirstStep}

@@ -2,7 +2,20 @@ import styled from 'styled-components'
 import { EnhancesItem } from './EnhancesItem'
 import { Heading } from '../../Assets/Heading'
 import { PlanContainer } from '../SubscriptionPlan/SubscriptionPlan'
-import { useRef } from 'react'
+
+
+
+
+
+
+const AddonItem = styled(PlanContainer)`
+	@media (min-width: 768px){
+		flex-direction: column;
+	}
+`
+
+
+
 const addons = [
 	{
 		id: '1',
@@ -58,7 +71,7 @@ export const Enhances = (props: EnhancesProps) => {
 				description='Add-ons help enhance your gaming experience.'
 				title='Pick add-ons'
 			/>
-			<PlanContainer>{addonItem}</PlanContainer>
+			<AddonItem>{addonItem}</AddonItem>
 		</>
 	)
 }

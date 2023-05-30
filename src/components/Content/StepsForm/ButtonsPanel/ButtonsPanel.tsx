@@ -9,22 +9,30 @@ interface StyledButton {
 
 const ButtonBox = styled.div`
 	width: 100%;
-	padding: 0.7rem 1.5rem;
+	padding: 1.2rem 1.5rem;
 	display: flex;
-
+	position: fixed;
+	bottom: 0;
 	justify-content: space-between;
 	background-color: var(--white);
+
+	@media (min-width: 768px){
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 70%;
+	}
 `
 
 const Button = styled.button<StyledButton>`
 	border: none;
-	padding: 0.5rem 1rem;
+	padding: .7rem 1rem;
 	border-radius: 5px;
 	text-transform: capitalize;
 	margin-left: ${props => (props.$reverse ? null : 'auto')};
 
 	background-color: ${props => (props.$primary ? 'var(--primary)' : 'transparent')};
-	color: ${props => (props.$primary ? 'var(--white)' : 'var(--grey)')};
+	color: ${props => (props.$primary ? 'var(--white)' : 'var(--gray)')};
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 	&:hover {
@@ -50,7 +58,6 @@ export const ButtonsPanel = ({
 	isLastStep,
 	firstStepIsValid,
 }: ButtonProps) => {
-
 
 
 	return (

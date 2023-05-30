@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { useState } from 'react'
 const ToggleBox = styled.div`
 	margin-top: 2rem;
 	justify-content: space-around;
@@ -13,7 +12,7 @@ type H3StyledProps = {
 }
 const H3 = styled.h3<H3StyledProps>`
 	color: ${props => props.$monthly || props.$yearly};
-	font-size: 1em;
+	font-size: .7em;
 	transition: color 0.3s;
 `
 const Switch = styled.button`

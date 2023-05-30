@@ -8,9 +8,18 @@ export const PlanContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	@media (min-width: 768px){
+		flex-direction: row;
+	}
 `
 type SubscriptionProps = {
-	updateFields: (field: { selectedPlan: string } | { selectedPlanPrice: number }) => void
+	updateFields: (
+		field:
+			| { selectedPlan: string }
+			| { selectedPlanPrice: number }
+			| { choosedPlan: string }
+			| { goBackToPlans: boolean }
+	) => void
 	selectedPlan: string | null
 	toggleStatePlans: boolean
 }
@@ -36,6 +45,8 @@ const planVersion = [
 ]
 
 export const SubscriptionPlan = ({ updateFields, selectedPlan, toggleStatePlans }: SubscriptionProps) => {
+	// updateFields({goBackToPlans: 0})
+
 	const planItem = planVersion.map(item => (
 		<PlanItem
 			key={item.id}
