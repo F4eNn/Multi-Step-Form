@@ -60,7 +60,6 @@ const INITIAL_DATA: FormData = {
 	largerStoragePrice: 0,
 	customProfilePrice: 0,
 }
-
 export default function Home() {
 	const [data, setData] = useState(INITIAL_DATA)
 	const updateFields = (fields: Partial<FormData>) => {
