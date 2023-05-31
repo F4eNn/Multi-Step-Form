@@ -5,6 +5,7 @@ import { Span } from '../Content/StepsForm/SubscriptionPlan/PlanItem'
 import { H2 } from '../Content/StepsForm/SubscriptionPlan/PlanItem'
 import { useMediaQuery } from '@react-hook/media-query'
 import { useEffect, useState } from 'react'
+
 const HeroImg = styled.div`
 	background-image: url(${heroMobile.src});
 	background-repeat: no-repeat;
@@ -70,6 +71,7 @@ const StyledDiv = styled.div`
 export const HeroBg = ({ currentIndex }: { currentIndex: number }) => {
 	const matches = useMediaQuery('(min-width: 768px)')
 	const [isMatched, setIsMatched] = useState(false)
+
 	useEffect(() => {
 		setIsMatched(matches)
 		// eslint-disable-next-line react-hooks/exhaustive-deps

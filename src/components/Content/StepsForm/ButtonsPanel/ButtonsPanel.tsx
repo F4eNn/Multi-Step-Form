@@ -1,12 +1,5 @@
 import styled from 'styled-components'
 
-interface StyledButton {
-	$primary?: boolean
-	bghover?: string
-	colorhover?: string
-	$reverse?: boolean
-}
-
 const ButtonBox = styled.div`
 	width: 100%;
 	padding: 1.2rem 1.5rem;
@@ -16,7 +9,7 @@ const ButtonBox = styled.div`
 	justify-content: space-between;
 	background-color: var(--white);
 
-	@media (min-width: 768px){
+	@media (min-width: 768px) {
 		position: absolute;
 		bottom: 0;
 		right: 0;
@@ -26,7 +19,7 @@ const ButtonBox = styled.div`
 
 const Button = styled.button<StyledButton>`
 	border: none;
-	padding: .7rem 1rem;
+	padding: 0.7rem 1rem;
 	border-radius: 5px;
 	text-transform: capitalize;
 	margin-left: ${props => (props.$reverse ? null : 'auto')};
@@ -44,22 +37,8 @@ const Button = styled.button<StyledButton>`
 		cursor: not-allowed;
 	}
 `
-type ButtonProps = {
-	next: () => void
-	back: () => void
-	isFirstStep: boolean
-	isLastStep: boolean
-	firstStepIsValid: boolean
-}
-export const ButtonsPanel = ({
-	back,
-	next,
-	isFirstStep,
-	isLastStep,
-	firstStepIsValid,
-}: ButtonProps) => {
 
-
+export const ButtonsPanel = ({ back, next, isFirstStep, isLastStep, firstStepIsValid }: ButtonPanelProps) => {
 	return (
 		<ButtonBox>
 			{!isFirstStep && (

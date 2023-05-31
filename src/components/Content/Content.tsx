@@ -18,6 +18,7 @@ const Card = styled.div`
 		width: 475px;
 	}
 `
+
 type ContentProps = {
 	step: ReactElement
 	next: () => void
@@ -27,7 +28,6 @@ type ContentProps = {
 	firstStepIsValid: boolean
 	currentStepIndex: number
 }
-
 export const Content = ({
 	step,
 	back,

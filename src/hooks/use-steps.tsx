@@ -21,7 +21,7 @@ export const useSteps = (steps: ReactElement[], goBackToPlans: boolean) => {
 		})
 	}
 	useEffect(() => {
-		if(goBackToPlans) return goToPlans()
+		if (goBackToPlans) return goToPlans()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [goBackToPlans])
 	return {
@@ -30,6 +30,6 @@ export const useSteps = (steps: ReactElement[], goBackToPlans: boolean) => {
 		nextStep,
 		backStep,
 		step: steps[currentStepIndex],
-		currentStepIndex
+		currentStepIndex,
 	}
 }

@@ -3,18 +3,11 @@ import { EnhancesItem } from './EnhancesItem'
 import { Heading } from '../../Assets/Heading'
 import { PlanContainer } from '../SubscriptionPlan/SubscriptionPlan'
 
-
-
-
-
-
 const AddonItem = styled(PlanContainer)`
-	@media (min-width: 768px){
+	@media (min-width: 768px) {
 		flex-direction: column;
 	}
 `
-
-
 
 const addons = [
 	{
@@ -39,14 +32,6 @@ const addons = [
 		price: 2,
 	},
 ]
-
-type EnhancesProps = {
-	updateFields: (fields: any) => void
-	toggleStatePlans: boolean
-	onlineService: string
-	largerStorage: string
-	customProfile: string
-}
 
 export const Enhances = (props: EnhancesProps) => {
 	const addonItem = addons.map(addon => (

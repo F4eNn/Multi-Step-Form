@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 const ToggleBox = styled.div`
 	margin-top: 2rem;
 	justify-content: space-around;
@@ -6,13 +7,10 @@ const ToggleBox = styled.div`
 	width: 100%;
 	padding: 1rem;
 `
-type H3StyledProps = {
-	$monthly?: string
-	$yearly?: string
-}
+
 const H3 = styled.h3<H3StyledProps>`
 	color: ${props => props.$monthly || props.$yearly};
-	font-size: .7em;
+	font-size: 0.7em;
 	transition: color 0.3s;
 `
 const Switch = styled.button`
@@ -40,13 +38,7 @@ const Switch = styled.button`
 	}
 `
 
-type PlanProps = {
-	// getPeriodHelper: (month: boolean) => void
-	updateFields: (fields: any) => void
-	toggleStatePlans: boolean
-}
-
-export const TogglePlan = (props: PlanProps) => {
+export const TogglePlan = (props: TogglePlanProps) => {
 	const switchPlan = () => {
 		if (!props.toggleStatePlans) {
 			props.updateFields({ toggleStatePlans: true })

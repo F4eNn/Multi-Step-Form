@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
-
+import { useEffect } from 'react'
+import { useInput } from '@/hooks/use-input'
 const Box = styled.div`
 	position: relative;
 	display: flex;
@@ -15,15 +15,13 @@ const Input = styled.input<{ $valid?: string | false }>`
 	&:focus {
 		outline: ${props => props.$valid || '1px solid var(--light-blue)'};
 	}
-	&::placeholder{
+	&::placeholder {
 		font-size: 1.1em;
 	}
-	
 `
 const Label = styled.label`
 	color: var(--primary);
 	font-size: 0.75em;
-
 `
 const ErrorMsg = styled.p`
 	position: absolute;
@@ -33,13 +31,6 @@ const ErrorMsg = styled.p`
 	color: var(--error);
 `
 
-type FormProps = {
-	updateFields: any
-	name: any
-	email: string
-	phone: string
-}
-
 export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 	const emailExpression =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -48,75 +39,52 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 	const telRegex = new RegExp(telExpression)
 	const emailRegex = new RegExp(emailExpression)
 
-	const [nameIsValid, setNameIsValid] = useState(false)
-	const [EmailIsValid, setEmailIsValid] = useState(false)
-	const [phoneIsValid, setPhoneIsValid] = useState(false)
-
-	const [debouncedInputs, setDebouncedInputs] = useState<any>('')
-
 	const phoneValidity = telRegex.test(phone)
 	const emailValidity = emailRegex.test(email)
 	const nameValidity = name !== ''
 
-	const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setNameIsValid(false)
-		updateFields({ name: e.target.value })
-	}
-	const onBlurName = () => {
-		if (!nameValidity) {
-			setNameIsValid(true)
-			return
-		}
-	}
+	const {
+		isError: nameIsValid,
+		inputValidity: nameValid,
+		onBlurInput: nameBlur,
+		onChangeInput: nameChange,
+	} = useInput('name', nameValidity, updateFields)
 
-	const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmailIsValid(false)
-		updateFields({ email: e.target.value })
-	}
-	const onBlurEmail = () => {
-		if (!emailValidity) {
-			setEmailIsValid(true)
-			return
-		}
-	}
-	const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setPhoneIsValid(false)
-		updateFields({ phone: e.target.value })
-	}
-	const onBlurPhone = () => {
-		if (!phoneValidity) {
-			setPhoneIsValid(true)
-			return
-		}
-	}
+	const {
+		isError: emailIsValid,
+		inputValidity: emailValid,
+		onBlurInput: emailBlur,
+		onChangeInput: emailChange,
+	} = useInput('email', emailValidity, updateFields)
+
+	const {
+		isError: phoneIsValid,
+		inputValidity: phoneValid,
+		onBlurInput: onBlurPhone,
+		onChangeInput: onChangePhone,
+	} = useInput('phone', phoneValidity, updateFields)
+
 	useEffect(() => {
-		if (emailValidity && phoneValidity && nameValidity) {
+		if (emailValid && phoneValid && nameValid) {
 			updateFields({ firstStepValid: true })
 			return
 		}
 		updateFields({ firstStepValid: false })
-		const timeoutId = setTimeout(() => {
-			setDebouncedInputs(name)
-		}, 5000)
-		
-		
-		return () => clearTimeout(timeoutId)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, email, phone, 5000])
-	console.log(name)
+	}, [name, email, phone])
 
 	const errorName = nameIsValid && '1px solid var(--error)'
-	const errorEmail = EmailIsValid && '1px solid var(--error)'
+	const errorEmail = emailIsValid && '1px solid var(--error)'
 	const errorTel = phoneIsValid && '1px solid var(--error)'
 	return (
 		<form>
 			<Box>
 				<Label htmlFor='name'>Name</Label>
-				{nameIsValid && <ErrorMsg>This field is required</ErrorMsg>}
+				{errorName && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
 					$valid={errorName}
-					onBlur={onBlurName}
-					onChange={onChangeName}
+					onBlur={nameBlur}
+					onChange={nameChange}
 					id='name'
 					type='text'
 					value={name}
@@ -128,8 +96,8 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 				{errorEmail && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
 					$valid={errorEmail}
-					onBlur={onBlurEmail}
-					onChange={onChangeEmail}
+					onBlur={emailBlur}
+					onChange={emailChange}
 					id='email'
 					type='email'
 					value={email}
@@ -140,8 +108,8 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 				<Label htmlFor='phone'>Phone Number</Label>
 				{errorTel && <ErrorMsg>This field is required</ErrorMsg>}
 				<Input
-					onBlur={onBlurPhone}
 					$valid={errorTel}
+					onBlur={onBlurPhone}
 					onChange={onChangePhone}
 					id='phone'
 					value={phone}

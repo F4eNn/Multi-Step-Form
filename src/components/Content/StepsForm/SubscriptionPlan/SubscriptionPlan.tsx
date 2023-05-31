@@ -1,28 +1,18 @@
 import styled from 'styled-components'
-import { useState } from 'react'
 import { Heading } from '../../Assets/Heading'
 import { PlanItem } from './PlanItem'
 import { TogglePlan } from './TogglePlan'
+
 export const PlanContainer = styled.div`
 	margin-top: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	@media (min-width: 768px){
+	@media (min-width: 768px) {
 		flex-direction: row;
 	}
 `
-type SubscriptionProps = {
-	updateFields: (
-		field:
-			| { selectedPlan: string }
-			| { selectedPlanPrice: number }
-			| { choosedPlan: string }
-			| { goBackToPlans: boolean }
-	) => void
-	selectedPlan: string | null
-	toggleStatePlans: boolean
-}
+
 const planVersion = [
 	{
 		id: '1',
@@ -45,8 +35,6 @@ const planVersion = [
 ]
 
 export const SubscriptionPlan = ({ updateFields, selectedPlan, toggleStatePlans }: SubscriptionProps) => {
-	// updateFields({goBackToPlans: 0})
-
 	const planItem = planVersion.map(item => (
 		<PlanItem
 			key={item.id}

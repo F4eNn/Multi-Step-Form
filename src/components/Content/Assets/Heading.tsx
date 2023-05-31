@@ -14,10 +14,7 @@ export const H1 = styled.h1`
 	margin-bottom: .6rem;
 `
 
-type HeadingProps = {
-	title: string
-	description: string
-}
+
 
 export const Heading = ({ description, title }: HeadingProps) => {
 	return (

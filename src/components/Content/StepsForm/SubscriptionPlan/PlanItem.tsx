@@ -44,21 +44,7 @@ const Badge = styled.p`
 	font-size: 0.9em;
 `
 
-type PlanItemProps = {
-	title: string
-	price: number
-	img: string
-	updateFields: (
-		field:
-			| { selectedPlan: string }
-			| { selectedPlanPrice: number }
-			| { choosedPlan: string }
-			| { goBackToPlans: boolean }
-	) => void
-	id: string
-	selectedPlan: string | null
-	toggleStatePlans: boolean
-}
+
 
 export const PlanItem = (props: PlanItemProps) => {
 	const [listenerActive, setListenerActive] = useState(false)

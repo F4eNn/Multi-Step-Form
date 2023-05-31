@@ -3,8 +3,8 @@ import { Button } from '../SubscriptionPlan/PlanItem'
 import { Content } from '../SubscriptionPlan/PlanItem'
 import { H2 } from '../SubscriptionPlan/PlanItem'
 import { Span } from '../SubscriptionPlan/PlanItem'
-import Image from 'next/image'
 import { useRef } from 'react'
+import Image from 'next/image'
 
 const AddonsButton = styled(Button)`
 	@media (min-width: 768px) {
@@ -34,20 +34,8 @@ const Checkbox = styled.div`
 	}
 `
 
-type EnhancesProps = {
-	id: string
-	updateFields: (fields: any) => void
-	img: string
-	title: string
-	desc: string
-	price: number
-	toggleStatePlans: boolean
-	onlineService: string
-	largerStorage: string
-	customProfile: string
-}
 
-export const EnhancesItem = (props: EnhancesProps) => {
+export const EnhancesItem = (props: EnchancesItems) => {
 	const addonsPrice = useRef<HTMLSpanElement>(null)
 
 	const toggleClass = (e: React.MouseEvent<HTMLButtonElement>) => {

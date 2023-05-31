@@ -14,14 +14,14 @@ const ubuntu = Ubuntu({ subsets: ['latin'], weight: ['300', '500', '700'] })
 
 const Main = styled.main`
 	width: 100%;
-	
-	@media (min-width: 768px){
+
+	@media (min-width: 768px) {
 		position: relative;
 		display: flex;
 		gap: 3.5rem;
 		background-color: #fff;
 		border-radius: 10px;
-		padding: .8rem;
+		padding: 0.8rem;
 		height: 500px;
 	}
 `
@@ -42,6 +42,7 @@ type FormData = {
 	largerStorage: string
 	customProfile: string
 }
+
 const INITIAL_DATA: FormData = {
 	email: '',
 	name: '',
@@ -123,7 +124,7 @@ export default function Home() {
 				/>
 			</Head>
 			<Main className={ubuntu.className}>
-				<HeroBg currentIndex={currentStepIndex}/>
+				<HeroBg currentIndex={currentStepIndex} />
 				<Content
 					currentStepIndex={currentStepIndex}
 					firstStepIsValid={data.firstStepValid}

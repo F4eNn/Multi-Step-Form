@@ -1,13 +1,6 @@
-
 import { Form } from './Form'
 import { Heading } from '../../Assets/Heading'
 
-type UserFormProps = {
-	updateFields: any
-	name: string
-	email: string
-	phone: string
-}
 export const PersonalData = ({ updateFields, name, email, phone }: UserFormProps) => {
 	return (
 		<>
