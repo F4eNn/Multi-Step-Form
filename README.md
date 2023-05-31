@@ -1,6 +1,10 @@
 ## Multi-step form
 
-![Design preview for the Multi-step form coding challenge](./desktop-preview.jpg)
+# [Live](https://multi-step-form-opal-pi.vercel.app/)
+
+# [Design from](https://www.frontendmentor.io/home)
+
+![Design preview for the Multi-step form coding challenge](./public/desktop-preview.jpg)
 
 ## Getting Started
 
