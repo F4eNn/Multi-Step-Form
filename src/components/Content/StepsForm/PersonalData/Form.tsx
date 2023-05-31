@@ -41,7 +41,7 @@ export const Form = ({ updateFields, name, email, phone }: FormProps) => {
 
 	const phoneValidity = telRegex.test(phone)
 	const emailValidity = emailRegex.test(email)
-	const nameValidity = name !== ''
+	const nameValidity = name.trim() !== '' 
 
 	const {
 		isError: nameIsValid,
